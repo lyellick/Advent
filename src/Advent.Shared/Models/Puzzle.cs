@@ -1,9 +1,10 @@
-﻿namespace Advent.Shared.Models
+﻿namespace Advent.Shared.Models;
+
+public sealed class Puzzle
 {
-    public class Puzzle
-    {
-        public int Year { get; set; }
-        public int Day { get; set; }
-        public string? Input { get; set; }
-    }
+    public required string Title { get; set; }
+    public int Year { get; set; }
+    public int Day { get; set; }
+    public required string Body { get; set; }
+    public required string Input { get; set; }
 }
