@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="Advent.Shared/Advent.Shared.csproj" Id="bb9aaad1-4c21-44a9-a059-08f2bacbee9e" />
+  <Project Path="Advent.Solutions/Advent.Solutions.csproj" Id="90967334-1cb5-4607-ad78-b04cf5eb1a05" />
 </Solution>
