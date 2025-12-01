@@ -30,17 +30,11 @@ public sealed class D01
         Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Title), "Puzzle title missing.");
         Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Body), "Puzzle HTML body missing.");
         Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Input), "Puzzle input missing.");
+        Assert.IsTrue(File.Exists(_cachePath), $"Expected cache file at '{_cachePath}' to exist after puzzle load.");
     }
 
     [TestMethod]
-    public void CacheFileExists()
-    {
-        Assert.IsTrue(File.Exists(_cachePath),
-            $"Expected cache file at '{_cachePath}' to exist after puzzle load.");
-    }
-
-    [TestMethod]
-    public void Part1()
+    public void P01()
     {
         var zeros = 0;
         var current = 50;
@@ -58,9 +52,7 @@ public sealed class D01
                     {
                         current++;
                         if (current == 100)
-                        {
                             current = 0;
-                        }
                     }
                 }
                 else if (rotation.StartsWith("l"))
@@ -69,16 +61,12 @@ public sealed class D01
                     {
                         current--;
                         if (current == -1)
-                        {
                             current = 99;
-                        }
                     }
                 }
 
                 if (current == 0)
-                {
                     zeros++;
-                }
             }
         }
 
@@ -86,7 +74,7 @@ public sealed class D01
     }
 
     [TestMethod]
-    public void Part2()
+    public void P02()
     {
         var zeros = 0;
         var current = 50;
@@ -104,14 +92,10 @@ public sealed class D01
                     {
                         current++;
                         if (current == 100)
-                        {
                             current = 0;
-                        }
 
                         if (current == 0)
-                        {
                             zeros++;
-                        }
                     }
                 }
                 else if (rotation.StartsWith("l"))
@@ -120,14 +104,10 @@ public sealed class D01
                     {
                         current--;
                         if (current == -1)
-                        {
                             current = 99;
-                        }
-                        
+
                         if (current == 0)
-                        {
                             zeros++;
-                        }
                     }
                 }
             }

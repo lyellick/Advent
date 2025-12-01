@@ -29,23 +29,17 @@ public sealed class Template
         Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Title), "Puzzle title missing.");
         Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Body), "Puzzle HTML body missing.");
         Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Input), "Puzzle input missing.");
+        Assert.IsTrue(File.Exists(_cachePath), $"Expected cache file at '{_cachePath}' to exist after puzzle load.");
     }
 
     [TestMethod]
-    public void CacheFileExists()
-    {
-        Assert.IsTrue(File.Exists(_cachePath),
-            $"Expected cache file at '{_cachePath}' to exist after puzzle load.");
-    }
-
-    [TestMethod]
-    public void Part1()
+    public void P01()
     {
         Assert.Fail("Part 1 not implemented.");
     }
 
     [TestMethod]
-    public void Part2()
+    public void P02()
     {
         Assert.Fail("Part 2 not implemented.");
     }
