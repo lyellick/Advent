@@ -107,6 +107,11 @@ public sealed class D01
                         {
                             current = 0;
                         }
+
+                        if (current == 0)
+                        {
+                            zeros++;
+                        }
                     }
                 }
                 else if (rotation.StartsWith("l"))
@@ -114,21 +119,20 @@ public sealed class D01
                     for (int i = 0; i < r; i++)
                     {
                         current--;
-                        if (current < 0)
+                        if (current == -1)
                         {
                             current = 99;
                         }
+                        
+                        if (current == 0)
+                        {
+                            zeros++;
+                        }
                     }
-                }
-
-                if (current == 0)
-                {
-                    zeros++;
                 }
             }
         }
 
-        Assert.AreEqual(1048, zeros);
+        Assert.AreEqual(6498, zeros);
     }
-
 }
