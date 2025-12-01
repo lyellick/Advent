@@ -68,7 +68,7 @@ public sealed class D01
                     for (int i = 0; i < r; i++)
                     {
                         current--;
-                        if (current < 0)
+                        if (current == -1)
                         {
                             current = 99;
                         }
