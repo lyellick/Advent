@@ -59,6 +59,7 @@ public sealed class D01
                         current++;
                         if (current == 100)
                         {
+                            zeros++;
                             current = 0;
                         }
                     }
@@ -70,65 +71,21 @@ public sealed class D01
                         current--;
                         if (current < 0)
                         {
+                            zeros++;
                             current = 99;
                         }
                     }
                 }
-
-                if (current == 0)
-                {
-                    zeros++;
-                }
             }
         }
-
-        Assert.AreEqual(1048, zeros);
+        Console.WriteLine()
+        Assert.Fail("Part 1 not implemented.");
     }
 
     [TestMethod]
     public void Part2()
     {
-        var zeros = 0;
-        var current = 50;
-        var rotations = _puzzle.Input.ToLower().Split("\n");
-
-        foreach (var rotation in rotations)
-        {
-            if (!string.IsNullOrEmpty(rotation))
-            {
-                var r = int.Parse(rotation.Substring(1));
-
-                if (rotation.StartsWith("r"))
-                {
-                    for (int i = 0; i < r; i++)
-                    {
-                        current++;
-                        if (current == 100)
-                        {
-                            current = 0;
-                        }
-                    }
-                }
-                else if (rotation.StartsWith("l"))
-                {
-                    for (int i = 0; i < r; i++)
-                    {
-                        current--;
-                        if (current < 0)
-                        {
-                            current = 99;
-                        }
-                    }
-                }
-
-                if (current == 0)
-                {
-                    zeros++;
-                }
-            }
-        }
-
-        Assert.AreEqual(1048, zeros);
+        Assert.Fail("Part 2 not implemented.");
     }
 
 }
