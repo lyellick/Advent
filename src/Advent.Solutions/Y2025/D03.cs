@@ -1,6 +1,7 @@
 ﻿using Advent.Shared.Attributes;
 using Advent.Shared.Models;
 using System.Linq;
+using System.Numerics;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Advent.Solutions.Y2025
@@ -44,14 +45,58 @@ namespace Advent.Solutions.Y2025
         [TestMethod]
         public void P02()
         {
-            // Stuck... notes for the goal...
-            // Select exactly 12 digits from a sequence of 100 digits.
-            // Selected 12 digit number is the largest.
-            // Order is perserved. 
-
             var batteries = Puzzle.Input.TrimEnd('\n').Split("\n").Select(pack => pack.Select(battery => int.Parse(battery.ToString())).ToArray());
 
-            
+            batteries = "987654321111111\n811111111111119\n234234234234278\n818181911112111".Split("\n").Select(pack => pack.Select(battery => int.Parse(battery.ToString())).ToArray());
+
+            List<long> joltages = [];
+
+            foreach (var battery in batteries)
+            {
+                var joltage = GetFirstLargestNumber(battery);
+
+                var combined = long.Parse(string.Join("", joltage));
+
+                joltages.Add(combined);
+            }
+
+            var total = joltages.Sum();
+
+            Assert.AreEqual(17207, total);
+        }
+
+        private static List<int> GetFirstLargestNumber(int[] battery, List<int> results = null)
+        {
+            results ??= [];
+
+            if (battery.Length == 0)
+            {
+                return results;
+            }
+
+            int largestNumber = battery[0];
+            int largestNumberIndex = 0;
+
+            for (int i = 1; i < battery.Length; i++)
+            {
+                if (battery[i] > largestNumber)
+                {
+                    largestNumber = battery[i];
+                    largestNumberIndex = i;
+                }
+            }
+
+            results.Add(largestNumber);
+
+            if (results.Count != 12)
+            {
+                int[] remainingBattery = new int[battery.Length - (largestNumberIndex + 1)];
+                Array.Copy(battery, (largestNumberIndex + 1), remainingBattery, 0, remainingBattery.Length);
+
+                results = GetFirstLargestNumber(remainingBattery, results);
+            }
+
+            return results;
         }
     }
 }
