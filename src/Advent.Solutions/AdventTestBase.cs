@@ -3,6 +3,8 @@ using Advent.Shared.Models;
 using Advent.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
 
+namespace Advent.Solutions;
+
 [TestClass]
 public abstract class AdventTestBase
 {
@@ -18,9 +20,9 @@ public abstract class AdventTestBase
             ?? throw new InvalidOperationException($"Missing [Puzzle(Y, D)] on {type.Name}");
 
         var services = new ServiceCollection();
-        
+
         services.AddHttpClient<IAdventService, AdventService>();
-        
+
         Provider = services.BuildServiceProvider();
         Advent = Provider.GetRequiredService<IAdventService>();
         Puzzle = await Advent.GetPuzzleAsync(attr.Year, attr.Day);
