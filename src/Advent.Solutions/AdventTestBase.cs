@@ -1,5 +1,4 @@
 ﻿using Advent.Shared.Attributes;
-using Advent.Shared.Caching;
 using Advent.Shared.Models;
 using Advent.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +23,7 @@ public abstract class AdventTestBase
         
         Provider = services.BuildServiceProvider();
         Advent = Provider.GetRequiredService<IAdventService>();
-        Puzzle = await AdventPuzzleCache.GetOrAddAsync(attr.Year, attr.Day, Advent);
+        Puzzle = await Advent.GetPuzzleAsync(attr.Year, attr.Day);
 
         if (Puzzle == null || string.IsNullOrWhiteSpace(Puzzle.Input))
             throw new InvalidOperationException("Puzzle failed to load.");
