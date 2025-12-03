@@ -7,6 +7,4 @@ public sealed class Puzzle
     public int Day { get; set; }
     public required string Body { get; set; }
     public required string Input { get; set; }
-
-    public string? CachePath { get; set; }
 }

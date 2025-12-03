@@ -48,8 +48,7 @@ public class AdventService : IAdventService
             Day = day,
             Title = title,
             Body = body,
-            Input = inputTask.Result,
-            CachePath = cachePath
+            Input = inputTask.Result
         };
 
         var jsonOut = JsonSerializer.Serialize(

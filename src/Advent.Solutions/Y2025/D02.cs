@@ -47,7 +47,6 @@ public sealed class D02 : AdventTestBase
 
         foreach (var product in products)
         {
-            long invalid = 0;
             var start = long.Parse(product.Split('-')[0]);
             var end = long.Parse(product.Split('-')[1]);
 
