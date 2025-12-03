@@ -18,5 +18,4 @@ public sealed class Template : AdventTestBase
     {
         Assert.Inconclusive("Part 2 not implemented.");
     }
-
 }
