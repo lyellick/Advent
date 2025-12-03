@@ -1,34 +1,12 @@
-﻿using Advent.Shared.Models;
-using Advent.Shared.Providers;
-using Advent.Shared.Services;
+﻿using Advent.Shared.Attributes;
+using Advent.Shared.Models;
 
 namespace Advent.Solutions;
 
 [TestClass]
-public sealed class Template
+[Puzzle(2015, 1)]
+public sealed class Template : AdventTestBase
 {
-    private const int Year = 2015;
-    private const int Day = 1;
-
-    private static IAdventService _adventService = null!;
-    private static Puzzle _puzzle = null!;
-
-    [ClassInitialize]
-    public static async Task Init(TestContext _)
-    {
-        _adventService = AdventServiceProvider.Get<IAdventService>();
-
-        _puzzle = await _adventService.GetPuzzleAsync(Year, Day);
-
-        Assert.IsNotNull(_puzzle, "Puzzle should not be null.");
-        Assert.AreEqual(Year, _puzzle.Year);
-        Assert.AreEqual(Day, _puzzle.Day);
-        Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Title), "Puzzle title missing.");
-        Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Body), "Puzzle HTML body missing.");
-        Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Input), "Puzzle input missing.");
-        Assert.IsTrue(File.Exists(_puzzle.CachePath), $"Expected cache file at '{_puzzle.CachePath}' to exist after puzzle load.");
-    }
-
     [TestMethod]
     public void P01()
     {

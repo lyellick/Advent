@@ -8,5 +8,5 @@ public sealed class Puzzle
     public required string Body { get; set; }
     public required string Input { get; set; }
 
-    public required string CachePath { get; set; }
+    public string? CachePath { get; set; }
 }

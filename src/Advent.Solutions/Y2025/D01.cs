@@ -1,41 +1,18 @@
-﻿using Advent.Shared.Models;
-using Advent.Shared.Providers;
-using Advent.Shared.Services;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
+﻿using Advent.Shared.Attributes;
+using Advent.Shared.Models;
 
 namespace Advent.Solutions.Y2025;
 
 [TestClass]
-public sealed class D01
+[Puzzle(2025, 1)]
+public sealed class D01 : AdventTestBase
 {
-    private const int Year = 2025;
-    private const int Day = 1;
-
-    private static IAdventService _adventService = null!;
-    private static Puzzle _puzzle = null!;
-
-    [ClassInitialize]
-    public static async Task Init(TestContext _)
-    {
-        _adventService = AdventServiceProvider.Get<IAdventService>();
-
-        _puzzle = await _adventService.GetPuzzleAsync(Year, Day);
-
-        Assert.IsNotNull(_puzzle, "Puzzle should not be null.");
-        Assert.AreEqual(Year, _puzzle.Year);
-        Assert.AreEqual(Day, _puzzle.Day);
-        Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Title), "Puzzle title missing.");
-        Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Body), "Puzzle HTML body missing.");
-        Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Input), "Puzzle input missing.");
-        Assert.IsTrue(File.Exists(_puzzle.CachePath), $"Expected cache file at '{_puzzle.CachePath}' to exist after puzzle load.");
-    }
-
     [TestMethod]
     public void P01()
     {
         var zeros = 0;
         var current = 50;
-        var rotations = _puzzle.Input.ToLower().Split("\n");
+        var rotations = Puzzle.Input.ToLower().Split("\n");
 
         foreach (var rotation in rotations)
         {
@@ -75,7 +52,7 @@ public sealed class D01
     {
         var zeros = 0;
         var current = 50;
-        var rotations = _puzzle.Input.ToLower().Split("\n");
+        var rotations = Puzzle.Input.ToLower().Split("\n");
 
         foreach (var rotation in rotations)
         {
