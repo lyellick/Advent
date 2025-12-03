@@ -1,6 +1,7 @@
 ﻿using Advent.Shared.Attributes;
 using Advent.Shared.Models;
 using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Advent.Solutions.Y2025
 {
@@ -43,7 +44,14 @@ namespace Advent.Solutions.Y2025
         [TestMethod]
         public void P02()
         {
-            Assert.Inconclusive("Part 2 not implemented.");
+            // Stuck... notes for the goal...
+            // Select exactly 12 digits from a sequence of 100 digits.
+            // Selected 12 digit number is the largest.
+            // Order is perserved. 
+
+            var batteries = Puzzle.Input.TrimEnd('\n').Split("\n").Select(pack => pack.Select(battery => int.Parse(battery.ToString())).ToArray());
+
+            
         }
     }
 }
