@@ -14,14 +14,11 @@ public sealed class D02
 
     private static IAdventService _adventService = null!;
     private static Puzzle _puzzle = null!;
-    private static string _cachePath = "";
 
     [ClassInitialize]
     public static async Task Init(TestContext _)
     {
         _adventService = AdventServiceProvider.Get<IAdventService>();
-
-        _cachePath = Path.Join(Path.GetTempPath(), $"AOC{Year}{Day:00}.json");
 
         _puzzle = await _adventService.GetPuzzleAsync(Year, Day);
 
@@ -31,7 +28,7 @@ public sealed class D02
         Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Title), "Puzzle title missing.");
         Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Body), "Puzzle HTML body missing.");
         Assert.IsFalse(string.IsNullOrWhiteSpace(_puzzle.Input), "Puzzle input missing.");
-        Assert.IsTrue(File.Exists(_cachePath), $"Expected cache file at '{_cachePath}' to exist after puzzle load.");
+        Assert.IsTrue(File.Exists(_puzzle.CachePath), $"Expected cache file at '{_puzzle.CachePath}' to exist after puzzle load.");
     }
 
     [TestMethod]
