@@ -47,7 +47,7 @@ namespace Advent.Solutions.Y2025
         {
             var batteries = Puzzle.Input.TrimEnd('\n').Split("\n").Select(pack => pack.Select(battery => int.Parse(battery.ToString())).ToArray());
 
-            batteries = "987654321111111\n811111111111119\n234234234234278\n818181911112111".Split("\n").Select(pack => pack.Select(battery => int.Parse(battery.ToString())).ToArray());
+            batteries = "811111111111119\n234234234234278\n818181911112111".Split("\n").Select(pack => pack.Select(battery => int.Parse(battery.ToString())).ToArray());
 
             List<long> joltages = [];
 
@@ -77,7 +77,7 @@ namespace Advent.Solutions.Y2025
             int largestNumber = battery[0];
             int largestNumberIndex = 0;
 
-            for (int i = 1; i < battery.Length; i++)
+            for (int i = 0; i < battery.Length; i++) 
             {
                 if (battery[i] > largestNumber)
                 {
