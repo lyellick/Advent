@@ -47,8 +47,6 @@ namespace Advent.Solutions.Y2025
         {
             var batteries = Puzzle.Input.TrimEnd('\n').Split("\n").Select(pack => pack.Select(battery => int.Parse(battery.ToString())).ToArray());
 
-            batteries = "811111111111119\n234234234234278\n818181911112111".Split("\n").Select(pack => pack.Select(battery => int.Parse(battery.ToString())).ToArray());
-
             List<long> joltages = [];
 
             foreach (var battery in batteries)
@@ -62,22 +60,24 @@ namespace Advent.Solutions.Y2025
 
             var total = joltages.Sum();
 
-            Assert.AreEqual(17207, total);
+            Assert.AreEqual(170997883706617, total);
         }
 
-        private static List<int> GetFirstLargestNumber(int[] battery, List<int> results = null)
+        private static List<long> GetFirstLargestNumber(int[] battery, int totalBatterySizeRemaining = 12, int currentIndex = 0, List<long>? results = null)
         {
             results ??= [];
 
-            if (battery.Length == 0)
+            if (totalBatterySizeRemaining == 0)
             {
                 return results;
             }
 
-            int largestNumber = battery[0];
-            int largestNumberIndex = 0;
+            int largestBatteryIndex = battery.Length - totalBatterySizeRemaining;
 
-            for (int i = 0; i < battery.Length; i++) 
+            int largestNumber = -1;
+            int largestNumberIndex = currentIndex;
+
+            for (int i = currentIndex; i <= largestBatteryIndex; i++)
             {
                 if (battery[i] > largestNumber)
                 {
@@ -88,12 +88,9 @@ namespace Advent.Solutions.Y2025
 
             results.Add(largestNumber);
 
-            if (results.Count != 12)
+            if (totalBatterySizeRemaining != 0)
             {
-                int[] remainingBattery = new int[battery.Length - (largestNumberIndex + 1)];
-                Array.Copy(battery, (largestNumberIndex + 1), remainingBattery, 0, remainingBattery.Length);
-
-                results = GetFirstLargestNumber(remainingBattery, results);
+                results = GetFirstLargestNumber(battery, totalBatterySizeRemaining - 1, largestNumberIndex + 1, results);
             }
 
             return results;
