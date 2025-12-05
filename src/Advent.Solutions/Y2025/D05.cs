@@ -52,6 +52,10 @@ namespace Advent.Solutions.Y2025
                 {
                     currentLineGraphPointEnd = currentLineGraphPointEnd > end ? currentLineGraphPointEnd : end;
                 }
+                else if (start <= currentLineGraphPointStart)
+                {
+                    currentLineGraphPointStart = currentLineGraphPointStart < start ? currentLineGraphPointStart : start;
+                }
                 else
                 {
                     cleanedRanges.Add((currentLineGraphPointStart, currentLineGraphPointEnd));
