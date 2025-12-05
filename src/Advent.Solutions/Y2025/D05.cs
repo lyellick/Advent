@@ -39,22 +39,19 @@ namespace Advent.Solutions.Y2025
                 .ThenBy(range => range.Item2)
                 .ToArray();
 
-            HashSet<(long lower, long upper)> cleanedRanges = [];
+            HashSet<(long start, long end)> cleanedRanges = [];
 
             var currentLineGraphPointStart = ranges[0].start;
             var currentLineGraphPointEnd = ranges[0].end;
 
-            for (int point = 1; point < ranges.Length; point++)
+            for (int i = 1; i < ranges.Length; i++)
             {
-                var (start, end) = ranges[point];
+                var (start, end) = ranges[i];
 
-                if (end <= currentLineGraphPointEnd)
+                if (start <= currentLineGraphPointEnd + 1)
                 {
-                    currentLineGraphPointEnd = currentLineGraphPointEnd > end ? currentLineGraphPointEnd : end;
-                }
-                else if (start <= currentLineGraphPointStart)
-                {
-                    currentLineGraphPointStart = currentLineGraphPointStart < start ? currentLineGraphPointStart : start;
+                    if (end > currentLineGraphPointEnd)
+                        currentLineGraphPointEnd = end;
                 }
                 else
                 {
@@ -64,6 +61,8 @@ namespace Advent.Solutions.Y2025
                 }
             }
 
+            cleanedRanges.Add((currentLineGraphPointStart, currentLineGraphPointEnd));
+
             long total = 0;
 
             foreach (var (start, end) in cleanedRanges)
@@ -71,7 +70,7 @@ namespace Advent.Solutions.Y2025
                 total += end - start + 1;
             }
 
-            Assert.Inconclusive("Part 2 not implemented.");
+            Assert.AreEqual(354143734113772, total);
         }
     }
 }
