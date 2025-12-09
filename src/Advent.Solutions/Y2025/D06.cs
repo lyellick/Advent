@@ -1,5 +1,6 @@
 ﻿using Advent.Shared.Attributes;
 using Advent.Shared.Models;
+using System.Numerics;
 
 namespace Advent.Solutions.Y2025
 {
@@ -38,42 +39,66 @@ namespace Advent.Solutions.Y2025
         [TestMethod]
         public void P02()
         {
-            var rows = Puzzle.Input.Split("\n", StringSplitOptions.RemoveEmptyEntries).Select(row => row.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToArray()).ToArray();
+            var rows = Puzzle.Input.Split("\n", StringSplitOptions.RemoveEmptyEntries).Select(l => l.PadRight(l.Length)).ToArray();
+
+            int rowCount = rows.Length - 1;
+            int colCount = rows.Max(l => l.Length);
 
             long total = 0;
+            int col = colCount - 1;
 
-            for (int i = 0; i < rows[0].Length; i++)
+            while (col >= 0)
             {
-                var a = rows[0][i];
-                var b = rows[1][i];
-                var c = rows[2][i];
-                var d = rows[3][i];
-
-                var problems = new[] { a, b, c, d };
-
-                var width = problems.Max(w => w.Length);
-
-                var cols = new List<char[]>();
-
-                foreach (var problem in problems)
+                bool isEmptyColumn = true;
+                for (int r = 0; r < rowCount; r++)
                 {
-                    var parts = problem.PadLeft(width).ToCharArray();
-
-                    cols.Add(parts);
+                    if (col < rows[r].Length && rows[r][col] != ' ')
+                    {
+                        isEmptyColumn = false;
+                    }
                 }
 
-                switch (rows[4][i])
+                if (isEmptyColumn)
                 {
-                    case "*":
-                        //total += a * b * c * d;
-                        break;
-                    case "+":
-                        //total += a + b + c + d;
-                        break;
+                    col--;
+                    continue;
                 }
+
+                var digits = new List<List<char>>();
+
+                while (col >= 0)
+                {
+                    bool hasDigit = false;
+                    List<char> number = [];
+
+                    for (int r = 0; r < rowCount; r++)
+                    {
+                        char c = col < rows[r].Length ? rows[r][col] : ' ';
+                        if (char.IsDigit(c))
+                        {
+                            hasDigit = true;
+                            number.Add(c);
+                        }
+                    }
+
+                    if (!hasDigit)
+                        break;
+
+                    digits.Add(number);
+                    col--;
+                }
+
+                char op = rows[^1][col + 1];
+
+                var numbers = digits.Select(colDigits => long.Parse(new string(colDigits.ToArray()))).ToList();
+
+                total += op == '*'
+                    ? numbers.Aggregate(1L, (a, b) => a * b)
+                    : numbers.Sum();
             }
 
-            Assert.AreEqual(8108520669952, total);
+            Assert.AreEqual(11708563470209, total);
         }
+
     }
 }
