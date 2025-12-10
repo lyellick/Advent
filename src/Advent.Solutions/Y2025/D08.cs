@@ -1,5 +1,4 @@
 ﻿using Advent.Shared.Attributes;
-using Advent.Shared.Models;
 
 namespace Advent.Solutions.Y2025
 {
@@ -10,41 +9,149 @@ namespace Advent.Solutions.Y2025
         [TestMethod]
         public void P01()
         {
-            //(long x, long y, long z)[] coords = Puzzle.Input.Split("\n", StringSplitOptions.RemoveEmptyEntries).Select(r => (long.Parse(r.Split(",")[0]), long.Parse(r.Split(",")[1]), long.Parse(r.Split(",")[2]))).ToArray();
-            (long x, long y, long z)[] coords = "162,817,812\n57,618,57\n906,360,560\n592,479,940\n352,342,300\n466,668,158\n542,29,236\n431,825,988\n739,650,466\n52,470,668\n216,146,977\n819,987,18\n117,168,530\n805,96,715\n346,949,466\n970,615,88\n941,993,340\n862,61,35\n984,92,344\n425,690,689".Split("\n", StringSplitOptions.RemoveEmptyEntries).Select(r => (long.Parse(r.Split(",")[0]), long.Parse(r.Split(",")[1]), long.Parse(r.Split(",")[2]))).ToArray();
+            (long x, long y, long z)[] coordinates = Puzzle.Input
+                .Split("\n", StringSplitOptions.RemoveEmptyEntries)
+                .Select(coordinate => (long.Parse(coordinate.Split(',')[0]), long.Parse(coordinate.Split(',')[1]), long.Parse(coordinate.Split(',')[2])))
+                .ToArray();
 
-            var start = coords[0];
-            var next = coords.Skip(1).ToArray();
+            int totalConnectionsToMake = 1000;
+            int pointCount = coordinates.Length;
 
-            var closest = GetClosest(start, next);
+            var edges = new List<(int Point1, int Point2, long DistanceSquared)>();
 
-            Assert.Inconclusive("Part 1 not implemented.");
+            for (int indexA = 0; indexA < pointCount; indexA++)
+            {
+                for (int indexB = indexA + 1; indexB < pointCount; indexB++)
+                {
+                    long distance = GetDistance(coordinates[indexA], coordinates[indexB]);
+                    edges.Add((indexA, indexB, distance));
+                }
+            }
+
+            edges.Sort((edgeA, edgeB) => edgeA.DistanceSquared.CompareTo(edgeB.DistanceSquared));
+
+            int[] parent = new int[pointCount];
+            int[] componentSize = new int[pointCount];
+
+            for (int i = 0; i < pointCount; i++)
+            {
+                parent[i] = i;
+                componentSize[i] = 1;
+            }
+
+            int edgeIndex = 0;
+
+            while (totalConnectionsToMake-- > 0)
+            {
+                var (pointA, pointB, _) = edges[edgeIndex++];
+
+                int rootA = Find(pointA, parent);
+                int rootB = Find(pointB, parent);
+
+                if (rootA == rootB)
+                    continue;
+
+                if (componentSize[rootA] < componentSize[rootB])
+                    (rootA, rootB) = (rootB, rootA);
+
+                parent[rootB] = rootA;
+                componentSize[rootA] += componentSize[rootB];
+            }
+
+            var sizeByRoot = new Dictionary<int, int>();
+
+            for (int i = 0; i < pointCount; i++)
+            {
+                int root = Find(i, parent);
+
+                if (!sizeByRoot.TryAdd(root, 1))
+                    sizeByRoot[root]++;
+            }
+
+            var circuitSizes = sizeByRoot.Values.ToList();
+            circuitSizes.Sort((a, b) => b.CompareTo(a));
+
+            long result = circuitSizes[0] * circuitSizes[1] * circuitSizes[2];
+
+            Assert.AreEqual(131150, result);
         }
 
         [TestMethod]
         public void P02()
         {
-            Assert.Inconclusive("Part 2 not implemented.");
-        }
+            (long x, long y, long z)[] coordinates = Puzzle.Input
+                .Split("\n", StringSplitOptions.RemoveEmptyEntries)
+                .Select(coordinate => (long.Parse(coordinate.Split(',')[0]), long.Parse(coordinate.Split(',')[1]), long.Parse(coordinate.Split(',')[2])))
+                .ToArray();
 
-        private (long x, long y, long z) GetClosest((long x, long y, long z) start, (long x, long y, long z)[] coords)
-        {
-            var closest = coords[0];
+            int pointCount = coordinates.Length;
 
-            long smallest = GetDistance(start, coords[0]);
+            var edges = new List<(int Point1, int Point2, long DistanceSquared)>(pointCount * (pointCount - 1) / 2);
 
-            foreach (var coord in coords)
+            for (int indexA = 0; indexA < pointCount; indexA++)
             {
-                long distance = GetDistance(start, coord);
-
-                if (distance < smallest)
+                for (int indexB = indexA + 1; indexB < pointCount; indexB++)
                 {
-                    smallest = distance;
-                    closest = coord;
+                    edges.Add((indexA, indexB, GetDistance(coordinates[indexA], coordinates[indexB])));
                 }
             }
 
-            return closest;
+            edges.Sort((edgeA, edgeB) => edgeA.DistanceSquared.CompareTo(edgeB.DistanceSquared));
+
+            int[] parent = new int[pointCount];
+            int[] componentSize = new int[pointCount];
+
+            for (int i = 0; i < pointCount; i++)
+            {
+                parent[i] = i;
+                componentSize[i] = 1;
+            }
+
+            int remainingComponents = pointCount;
+
+            (long X1, long X2) lastMergedXCoords = (0, 0);
+
+            foreach (var (pointA, pointB, _) in edges)
+            {
+                int rootA = Find(pointA, parent);
+                int rootB = Find(pointB, parent);
+
+                if (rootA == rootB)
+                {
+                    continue;
+                }
+
+                if (componentSize[rootA] < componentSize[rootB])
+                {
+                    (rootA, rootB) = (rootB, rootA);
+                }
+
+                parent[rootB] = rootA;
+                componentSize[rootA] += componentSize[rootB];
+                remainingComponents--;
+
+                lastMergedXCoords = (coordinates[pointA].x, coordinates[pointB].x);
+
+                if (remainingComponents == 1)
+                {
+                    break;
+                }
+            }
+
+            long result = lastMergedXCoords.X1 * lastMergedXCoords.X2;
+
+            Assert.AreEqual(2497445, result);
+        }
+
+
+        private static int Find(int index, int[] coords)
+        {
+            if (coords[index] != index)
+            {
+                coords[index] = Find(coords[index], coords);
+            }
+
+            return coords[index];
         }
 
         private static long GetDistance((long x, long y, long z) start, (long x, long y, long z) end)
