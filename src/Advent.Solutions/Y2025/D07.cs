@@ -59,7 +59,50 @@ namespace Advent.Solutions.Y2025
         [TestMethod]
         public void P02()
         {
-            Assert.Inconclusive("Part 2 not implemented.");
+            var rows = Puzzle.Input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(r => r.ToCharArray()).ToArray();
+
+            int width = rows[0].Length;
+
+            long[] path = new long[width];
+
+            path[rows[0].IndexOf('S')] = 1;
+
+            for (int row = 1; row < rows.Length; row++)
+            {
+                long[] next = new long[width];
+
+                for (int col = 0; col < width; col++)
+                {
+                    if (path[col] == 0)
+                        continue;
+
+                    char cell = rows[row][col];
+
+                    switch (cell)
+                    {
+                        case '.':
+                            next[col] += path[col];
+                            break;
+                        case '^':
+                            if (col > 0)
+                            {
+                                next[col - 1] += path[col];
+                            }
+
+                            if (col < width - 1)
+                            {
+                                next[col + 1] += path[col];
+                            }
+                            break;
+                    }
+                }
+
+                path = next;
+            }
+
+            long timelines = path.Sum();
+
+            Assert.AreEqual(25489586715621, timelines);
         }
     }
 }
